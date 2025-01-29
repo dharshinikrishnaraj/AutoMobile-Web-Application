@@ -1,5 +1,6 @@
 using AutoMob_WebAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using AutoMob_WebAPI.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,9 @@ builder.Services.AddSwaggerGen();
 
 //Register the DbContext with the services container
 builder.Services.AddDbContext<VehicleDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("VehicleDbContext")));
+
+//Register the repository with the services container
+builder.Services.AddTransient<IVehicleRepository, VehicleRepository>();
 
 var app = builder.Build();
 
