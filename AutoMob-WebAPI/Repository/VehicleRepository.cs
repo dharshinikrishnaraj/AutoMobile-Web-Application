@@ -1,4 +1,5 @@
-﻿using AutoMob_WebAPI.Models;
+﻿using AutoMob_WebAPI.Controllers;
+using AutoMob_WebAPI.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace AutoMob_WebAPI.Repository
@@ -6,20 +7,24 @@ namespace AutoMob_WebAPI.Repository
     public class VehicleRepository : IVehicleRepository
     {
         private readonly VehicleDbContext _context;
+        private readonly ILogger<VehicleController> _logger;
 
-        public VehicleRepository(VehicleDbContext context)
+        public VehicleRepository(VehicleDbContext context, ILogger<VehicleController> logger)
         { 
-            this._context = context;
+            _context = context;
+            _logger = logger;
         }
 
         public IEnumerable<VehicleModel> GetAllVehicles()
         {
             try
             {
+                _logger.LogInformation("Received request to retrieve all vehicles.");
                 return _context.Vehicles.ToList();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while retrieving all vehicles.");
                 throw;
             }
         }
@@ -28,10 +33,12 @@ namespace AutoMob_WebAPI.Repository
         {
             try
             {
+
                 return _context.Vehicles.Find(vehicleId);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while retrieving the vehicle with ID {VehicleId}.", vehicleId);
                 throw new Exception("An error occurred while retrieving vehicles.", ex);
             }
         }
@@ -46,6 +53,7 @@ namespace AutoMob_WebAPI.Repository
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while adding the vehicle.");
                 throw new Exception("An error occurred while retrieving the vehicle.", ex);
             }
         }
@@ -54,6 +62,7 @@ namespace AutoMob_WebAPI.Repository
         {
             try
             {
+                _logger.LogInformation("Updating vehicle with ID {VehicleId} in the database.", vehicle.Id);
                 if (VehicleExists(vehicle.Id))  //Find if the vehicle exists, if exists, update
                 {
                     _context.Vehicles.Update(vehicle);
@@ -64,6 +73,7 @@ namespace AutoMob_WebAPI.Repository
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while updating the vehicle with ID {VehicleId}.", vehicle.Id);
                 throw new Exception("An error occurred while adding the vehicle.", ex);
             }
         }
@@ -83,12 +93,14 @@ namespace AutoMob_WebAPI.Repository
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while deleting the vehicle with ID {VehicleId}.", vehicleId);
                 throw new Exception("An error occurred while deleting the vehicle.", ex);
             }
         }
 
         private bool VehicleExists(int vehicleId)
         {
+            _logger.LogInformation("Checking if vehicle with ID {VehicleId} exists in the database.", vehicleId);
             return _context.Vehicles.Any(x => x.Id == vehicleId);
         }
     }
