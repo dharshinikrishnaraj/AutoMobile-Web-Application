@@ -1,6 +1,8 @@
 using AutoMob_WebAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using AutoMob_WebAPI.Repository;
+using AutoMob_WebAPI;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,9 @@ app.UseRouting();
 app.UseCors();
 
 app.UseAuthorization();
+
+//Add Exception Middleware
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.MapControllers();
 
