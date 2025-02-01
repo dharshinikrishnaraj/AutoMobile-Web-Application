@@ -7,8 +7,8 @@ namespace AutoMob_WebAPI.Repository
         IEnumerable<VehicleModel> GetAllVehicles();
         VehicleModel GetVehicleById(int vehicleId);
         void AddVehicle(VehicleModel vehicle);
-        void UpdateVehicle(VehicleModel vehicle);
-        void DeleteVehicle(int vehicleId);
+        bool UpdateVehicle(VehicleModel vehicle);
+        bool DeleteVehicle(int vehicleId);
 
     }
 }

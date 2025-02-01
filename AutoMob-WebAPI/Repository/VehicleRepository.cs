@@ -14,43 +14,76 @@ namespace AutoMob_WebAPI.Repository
 
         public IEnumerable<VehicleModel> GetAllVehicles()
         {
-            return _context.Vehicles.ToList();
+            try
+            {
+                return _context.Vehicles.ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public VehicleModel GetVehicleById(int vehicleId)
         {
-            return _context.Vehicles.Find(vehicleId);
+            try
+            {
+                return _context.Vehicles.Find(vehicleId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving vehicles.", ex);
+            }
         }
 
         public void AddVehicle(VehicleModel vehicle)
         {
-             vehicle.Id = 0; // Id is an Identity column, Ensure EF Core does not treat it as an explicit value
-            _context.Vehicles.Add(vehicle);
-            _context.SaveChanges();
-        }
-
-        public void UpdateVehicle(VehicleModel vehicle)
-        {
-            if (VehicleExists(vehicle.Id))  //Find if the vehicle exists, if exists, update or create
-            {
-                _context.Vehicles.Update(vehicle);
-            } 
-            else
+            try
             {
                 vehicle.Id = 0; // Id is an Identity column, Ensure EF Core does not treat it as an explicit value
                 _context.Vehicles.Add(vehicle);
+                _context.SaveChanges();
             }
-            _context.SaveChanges();
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving the vehicle.", ex);
+            }
         }
 
-        public void DeleteVehicle(int vehicleId)
+        public bool UpdateVehicle(VehicleModel vehicle)
         {
-            var vehicle = _context.Vehicles.Find(vehicleId);
-            if (vehicle != null)
+            try
             {
-                _context.Vehicles.Remove(vehicle);
-                _context.SaveChanges();
-            
+                if (VehicleExists(vehicle.Id))  //Find if the vehicle exists, if exists, update
+                {
+                    _context.Vehicles.Update(vehicle);
+                    _context.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while adding the vehicle.", ex);
+            }
+        }
+
+        public bool DeleteVehicle(int vehicleId)
+        {
+            try
+            {
+                var vehicle = _context.Vehicles.Find(vehicleId);
+                if (vehicle != null)
+                {
+                    _context.Vehicles.Remove(vehicle);
+                    _context.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while deleting the vehicle.", ex);
             }
         }
 
