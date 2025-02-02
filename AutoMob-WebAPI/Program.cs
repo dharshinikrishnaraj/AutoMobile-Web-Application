@@ -6,6 +6,11 @@ using AutoMob_WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add Logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole(); // Logs to console
+builder.Logging.AddDebug();
+
 // Add services to the container.
 
 builder.Services.AddControllers();
