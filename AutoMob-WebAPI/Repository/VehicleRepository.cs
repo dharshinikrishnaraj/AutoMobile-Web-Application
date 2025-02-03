@@ -1,6 +1,6 @@
 ﻿using AutoMob_WebAPI.Controllers;
 using AutoMob_WebAPI.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace AutoMob_WebAPI.Repository
 {
@@ -75,6 +75,27 @@ namespace AutoMob_WebAPI.Repository
             {
                 _logger.LogError(ex, "An error occurred while updating the vehicle with ID {VehicleId}.", vehicle.Id);
                 throw new Exception("An error occurred while adding the vehicle.", ex);
+            }
+        }
+
+        public bool PatchVehicle(int vehicleId, JsonPatchDocument<VehicleModel> patchDoc)
+        {
+            try
+            {
+
+                var vehicle = _context.Vehicles.FirstOrDefault(x => x.Id == vehicleId);
+                if (vehicle == null)
+                {
+                    return false;
+                }
+                patchDoc.ApplyTo(vehicle);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while patching the vehicle with ID {VehicleId}.", vehicleId);
+                throw new Exception("An error occurred while patching the vehicle.", ex);
             }
         }
 

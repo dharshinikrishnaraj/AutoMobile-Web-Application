@@ -2,6 +2,7 @@
 using AutoMob_WebAPI.Models;
 using AutoMob_WebAPI.Repository;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.JsonPatch;
 
 
 namespace AutoMob_WebAPI.Controllers
@@ -61,6 +62,33 @@ namespace AutoMob_WebAPI.Controllers
             if (isUpdated)
             {
                 return Ok("Vehicle updated successfully");
+            }
+            else
+            {
+                return NotFound("Vehicle not found");
+            }
+        }
+
+        [HttpPatch("PatchVehicle/{id}")]
+        public IActionResult PatchVehicle(int id, [FromBody] JsonPatchDocument<VehicleModel> patchDoc)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Invalid vehicle ID {VehicleId} received for patching.", id);
+                return BadRequest("Please provide a valid vehicle id");
+            }
+
+            if (patchDoc == null)
+            {
+                _logger.LogWarning("Invalid patch document received for vehicle ID {VehicleId}.", id);
+                return BadRequest("Invalid patch document");
+            }
+
+            _logger.LogInformation("Received request to patch vehicle with ID {VehicleId}.", id);
+            bool isPatched = _repository.PatchVehicle(id, patchDoc);
+            if (isPatched)
+            {
+                return Ok("Vehicle patched successfully");
             }
             else
             {
