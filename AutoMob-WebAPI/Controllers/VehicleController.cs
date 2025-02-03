@@ -37,6 +37,7 @@ namespace AutoMob_WebAPI.Controllers
                     _logger.LogWarning("Invalid vehicle ID {VehicleId} received.", id);
                     return BadRequest("Please provide a valid vehicle id");
                 }
+                _logger.LogInformation("Received request to retrieve all vehicles by Id");
                 var vehicles = _repository.GetVehicleById(id);
                 return Ok(vehicles);
         }

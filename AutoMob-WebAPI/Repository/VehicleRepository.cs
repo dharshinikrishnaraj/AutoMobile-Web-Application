@@ -19,7 +19,7 @@ namespace AutoMob_WebAPI.Repository
         {
             try
             {
-                _logger.LogInformation("Received request to retrieve all vehicles.");
+                _logger.LogInformation("Retrieving all vehicles.");
                 return _context.Vehicles.ToList();
             }
             catch (Exception ex)
@@ -33,7 +33,7 @@ namespace AutoMob_WebAPI.Repository
         {
             try
             {
-
+                _logger.LogInformation("Retrieving all vehicles by Id");
                 return _context.Vehicles.Find(vehicleId);
             }
             catch (Exception ex)
@@ -47,6 +47,7 @@ namespace AutoMob_WebAPI.Repository
         {
             try
             {
+                _logger.LogInformation("Adding the vehicle");
                 vehicle.Id = 0; // Id is an Identity column, Ensure EF Core does not treat it as an explicit value
                 _context.Vehicles.Add(vehicle);
                 _context.SaveChanges();
@@ -82,7 +83,7 @@ namespace AutoMob_WebAPI.Repository
         {
             try
             {
-
+                _logger.LogInformation("Patching vehicle with ID {VehicleId} in the database.", vehicleId);
                 var vehicle = _context.Vehicles.FirstOrDefault(x => x.Id == vehicleId);
                 if (vehicle == null)
                 {
@@ -106,6 +107,7 @@ namespace AutoMob_WebAPI.Repository
                 var vehicle = _context.Vehicles.Find(vehicleId);
                 if (vehicle != null)
                 {
+                    _logger.LogInformation("Removing vehicle with ID {VehicleId} in the database.", vehicleId);
                     _context.Vehicles.Remove(vehicle);
                     _context.SaveChanges();
                     return true;
