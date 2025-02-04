@@ -10,6 +10,7 @@ namespace AutoMob_WebAPI.Models
         }
 
         public DbSet<VehicleModel> Vehicles { get; set;}
+        public DbSet<UserModel> Users { get; set; }
 
         //To connect to the database, configure the context class, use optionsBuilder to specify the connection string.
         // Add the connection string to appSettings & Program.cs

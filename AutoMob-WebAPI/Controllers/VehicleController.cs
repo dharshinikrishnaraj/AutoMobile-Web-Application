@@ -3,10 +3,12 @@ using AutoMob_WebAPI.Models;
 using AutoMob_WebAPI.Repository;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace AutoMob_WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class VehicleController : ControllerBase
