@@ -54,6 +54,8 @@ namespace AutoMob_WebAPI.Controllers
                 {
                     new Claim(ClaimTypes.Name, authenticatedUser.Username)
                 }),
+                Issuer = _configuration["Jwt:Issuer"], // Include Issuer
+                Audience = _configuration["Jwt:Audience"], // Include Audience
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };

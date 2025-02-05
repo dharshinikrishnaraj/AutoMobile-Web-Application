@@ -36,7 +36,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\n\nExample: \"Bearer abcdefghijklmnopqrstuvwxyz\""
+        Description = "Enter 'Bearer' the valid token in the text input below"
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -56,6 +56,7 @@ builder.Services.AddSwaggerGen(c =>
 
 // Configure JWT Authentication
 builder.Services.AddAuthentication(options =>
+
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -71,7 +72,7 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
         ValidateIssuer = true,
-        ValidateAudience = false,
+        ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true
     };
@@ -103,6 +104,9 @@ app.UseRouting();
 app.UseCors();
 
 app.UseAuthorization();
+
+// Add Custom Authentication Middleware
+app.UseMiddleware<GlobalAuthenticationMiddleware>();
 
 //Add Exception Middleware
 app.UseMiddleware<GlobalExceptionMiddleware>();
