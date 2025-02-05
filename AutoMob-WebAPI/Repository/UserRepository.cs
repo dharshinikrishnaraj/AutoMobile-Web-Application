@@ -2,7 +2,7 @@
 
 namespace AutoMob_WebAPI.Repository
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly VehicleDbContext _context;
 
@@ -17,6 +17,7 @@ namespace AutoMob_WebAPI.Repository
 
         public void Register(UserModel user)
         {
+            user.UserId = 0;
             _context.Users.Add(user);
             _context.SaveChanges();
         }

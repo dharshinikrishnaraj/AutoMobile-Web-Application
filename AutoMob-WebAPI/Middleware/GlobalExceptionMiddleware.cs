@@ -1,4 +1,4 @@
-﻿namespace AutoMob_WebAPI
+﻿namespace AutoMob_WebAPI.Middleware
 {
     public class GlobalExceptionMiddleware
     {

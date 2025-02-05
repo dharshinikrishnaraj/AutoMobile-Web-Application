@@ -36,7 +36,7 @@ namespace AutoMob_WebAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost("Login")]
-        public IActionResult Login(UserModel user)
+        public IActionResult Login([FromBody] UserModel user)
         {
             _logger.LogInformation("Received request to login.");
             var authenticatedUser = _userRepository.Authenticate(user.Username, user.Password);
